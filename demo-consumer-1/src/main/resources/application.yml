@@ -1,0 +1,21 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: greeting
+      properties:
+        spring.json.trusted.packages: com.microservice.demo.producer1.domain
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/a
+    username: root
+    password: root
+    
+  application:
+    name: consumer
+    
+    
+server:
+  port: 8081
