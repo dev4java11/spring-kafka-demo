@@ -16,6 +16,8 @@ import com.microservice.demo.producer1.domain.GreetingProducerMessage;
 public class GreetingController {
 	
 	public static final String TOPIC = "topic-demo";
+	
+	public static final String TOPIC_WITH_PARTITION = "topic-demo-with-partition";
 
 	private KafkaTemplate<String, GreetingProducerMessage> template;
 	
@@ -24,6 +26,7 @@ public class GreetingController {
 		this.template = template;
 	}
 	
+	// MANDA UN MENSAJE AL TOPICO
 	@GetMapping("/{message}")
 	public String createMessage(@PathVariable String message) {
 		GreetingProducerMessage gm = GreetingProducerMessage.builder().uuid(UUID.randomUUID().toString()).description(message).build();
@@ -31,4 +34,11 @@ public class GreetingController {
 		return "Mensaje entregado exitosamente.";
 	}
 	
+	// MANDA EL MENSAJE A UNA PARTICION DE UN TOPICO
+	@GetMapping("/{partition}/{message}")
+	public String createMessage(@PathVariable Integer partition, @PathVariable String message) {
+		GreetingProducerMessage gm = GreetingProducerMessage.builder().uuid(UUID.randomUUID().toString()).description(message).build();
+		template.send(TOPIC_WITH_PARTITION, partition, gm.getUuid(), gm);
+		return "Mensaje entregado exitosamente.";
+	}
 }
